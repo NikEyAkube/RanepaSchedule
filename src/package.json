@@ -1,10 +1,11 @@
 {
   "name": "petproj",
   "version": "1.0.0",
-  "main": "server.js",
+  "main": "src/server.js",
   "scripts": {
-    "start": "node server.js",
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "start": "node src/server.js",
+    "build": "npm install",
+    "dev": "nodemon src/server.js"
   },
   "keywords": [],
   "author": "",
@@ -15,10 +16,10 @@
     "dotenv": "^16.4.5",
     "express": "^4.19.2",
     "googleapis": "^144.0.0",
-    "http": "^0.0.1-security",
-    "natural": "^8.0.1",
-    "path": "^0.12.7",
-    "url": "^0.11.4"
+    "natural": "^8.0.1"
+  },
+  "devDependencies": {
+    "nodemon": "^2.0.22"
   },
   "type": "module"
 }
