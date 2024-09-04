@@ -5,6 +5,7 @@ import { google } from 'googleapis';
 import path from 'path';
 import natural from 'natural';
 import { fileURLToPath } from 'url';
+import { Analytics } from "@vercel/analytics/react";
 
 dotenv.config();
 
