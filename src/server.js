@@ -49,9 +49,15 @@ app.post('/api/schedule', async (req, res) => {
     const questionParts = question.toLowerCase().split(' ');
     let group, day, month;
 
+    // Функция для получения текущей даты в московском времени
+    function getMoscowDate() {
+      const now = new Date();
+      return new Date(now.toLocaleString("en-US", {timeZone: "Europe/Moscow"}));
+    }
+
     if (questionParts[0] === 'сегодня' || questionParts[0] === 'завтра') {
       group = 'БИ-3-21-01';
-      const date = new Date();
+      const date = getMoscowDate();
       if (questionParts[0] === 'завтра') {
         date.setDate(date.getDate() + 1);
       }
@@ -60,11 +66,11 @@ app.post('/api/schedule', async (req, res) => {
     } else if (questionParts[0] === 'би-3-21-01') {
       group = 'БИ-3-21-01';
       if (questionParts[1] === 'сегодня') {
-        const today = new Date();
+        const today = getMoscowDate();
         day = today.getDate();
         month = today.getMonth() + 1;
       } else if (questionParts[1] === 'завтра') {
-        const tomorrow = new Date();
+        const tomorrow = getMoscowDate();
         tomorrow.setDate(tomorrow.getDate() + 1);
         day = tomorrow.getDate();
         month = tomorrow.getMonth() + 1;
