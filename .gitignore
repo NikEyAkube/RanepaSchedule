@@ -1,0 +1,17 @@
+.env
+node_modules
+ranepa-bot-nltk-d47c0836fd58.json
+package-lock.json
+# Логи
+logs
+*.log
+npm-debug.log*
+/dist
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+*.swp
+*.swo
+*.tmp
+*.temp
