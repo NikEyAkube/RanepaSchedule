@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>University Schedule Chat</title>
+    <link href="https://fonts.googleapis.com/css?family=Source+Code+Pro" rel="stylesheet">
     <style>
         :root {
             --apple-blue: #007AFF;
@@ -33,23 +34,28 @@
             margin-bottom: 20px;
         }
         h1 {
-            animation: colorChange 5s infinite, fadeIn 1.5s ease-out;
+            font-size: 40px;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+            color: var(--ranepa-blue);
+            display: inline-block;
             position: relative;
-            z-index: 1;
-            text-align: center;
-            color: #1D1D1F;
-            font-weight: 600;
-            font-size: 28px;
             margin-bottom: 30px;
+            /* -webkit-mask-image: linear-gradient(-75deg, rgba(0, 0, 0, .3) 30%, #000 50%, rgba(0, 0, 0, .3) 70%);
+            mask-image: linear-gradient(-75deg, rgba(0, 0, 0, .3) 30%, #000 50%, rgba(0, 0, 0, .3) 70%);
+            -webkit-mask-size: 200%;
+            mask-size: 200%;
+            animation: wave 4s linear infinite; */
         }
-        @keyframes colorChange {
-            0% { color: #0033a0; }
-            50% { color: #007AFF; }
-            100% { color: #0033a0; }
-        }
-        @keyframes fadeIn {
-            from { opacity: 0; transform: translateY(-20px); }
-            to { opacity: 1; transform: translateY(0); }
+        @keyframes wave {
+            from {
+                -webkit-mask-position: 150%;
+                mask-position: 150%;
+            }
+            to {
+                -webkit-mask-position: -50%;
+                mask-position: -50%;
+            }
         }
         .stick-figure {
             position: absolute;
@@ -72,11 +78,19 @@
             box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
-        #chat-container:hover {
-            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
-            transform: translateY(-5px);
+        #chat-container::-webkit-scrollbar {
+            width: 10px;
+        }
+        #chat-container::-webkit-scrollbar-track {
+            background: var(--apple-gray);
+            border-radius: 5px;
+        }
+        #chat-container::-webkit-scrollbar-thumb {
+            background: var(--apple-dark-gray);
+            border-radius: 5px;
         }
         #input-container {
+            position: relative;
             display: flex;
             gap: 10px;
             background-color: rgba(255, 255, 255, 0.8);
@@ -85,23 +99,72 @@
             box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
             transition: all 0.3s ease;
         }
-        #input-container:focus-within {
-            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
-            transform: translateY(-3px);
-        }
         #user-input {
             flex-grow: 1;
             padding: 12px 16px;
             border: none;
             border-radius: 12px;
             font-size: 16px;
-            background-color: #FFFFFF;
+            background-color: transparent;
             color: #1D1D1F;
             transition: all 0.3s ease;
+            position: relative;
+            z-index: 2;
+            outline: none; /* Убираем стандартную обводку при фокусе */
         }
         #user-input:focus {
-            outline: none;
-            box-shadow: 0 0 0 2px var(--apple-blue);
+            box-shadow: none; /* Убираем тень при фокусе, если она есть */
+        }
+        #user-input::placeholder {
+            color: transparent;
+        }
+        #input-placeholder {
+            position: absolute;
+            left: 26px;
+            top: 50%;
+            transform: translateY(-50%);
+            font-size: 16px;
+            font-weight: bold;
+            font-family: Arial, sans-serif;
+            pointer-events: none;
+            z-index: 1;
+            background-image: linear-gradient(
+                -75deg,
+                rgba(128, 128, 128, 0.6) 30%,
+                var(--ranepa-blue) 50%,
+                rgba(128, 128, 128, 0.6) 70%
+            );
+            background-size: 200% auto;
+            color: var(--ranepa-blue);
+            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shine 4s linear infinite;
+        }
+        @keyframes shine {
+            from {
+                background-position: 200% center;
+            }
+            to {
+                background-position: 0% center;
+            }
+        }
+        #user-input:not(:placeholder-shown) + #input-placeholder {
+            display: none;
+        }
+        .shimmering-text {
+            background-image: linear-gradient(
+                -75deg,
+                rgba(255, 255, 255, 0.6) 30%,
+                var(--ranepa-blue) 50%,
+                rgba(128, 128, 128, 0.6) 70%
+            );
+            background-size: 200% auto;
+            color: var(--ranepa-blue);
+            -webkit-text-fill-color: transparent;
+            -webkit-background-clip: text;
+            background-clip: text;
+            animation: shine 4s linear infinite;
         }
         .button {
             background-color: var(--ranepa-blue);
@@ -119,6 +182,7 @@
         }
         .button:hover {
             background-color: var(--ranepa-light-blue);
+            transform: translateY(-2px);
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
         }
         .button:active {
@@ -149,6 +213,11 @@
             word-wrap: break-word;
             border-bottom: 1px solid #e0e0e0;
             padding-bottom: 15px;
+            animation: fadeIn 0.3s ease-out;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
         }
         .message:last-child {
             border-bottom: none;
@@ -237,36 +306,63 @@
             position: fixed;
             bottom: 10px;
             right: 10px;
-            font-size: 14px;
-            color: var(--apple-dark-gray);
-            animation: fadeIn 1s ease-out;
+            font-family: 'Source Code Pro', monospace;
+            font-size: 18px;
+            color: #333333;
+            white-space: nowrap;
+            overflow: hidden;
+            border-right: solid 3px rgba(0,255,0,.75);
+            animation: 
+                animated-text 4s steps(29,end) 1s 1 normal both,
+                animated-cursor 600ms steps(29,end) infinite;
+            padding-right: 5px;
+            z-index: 1000;
+            background-color: rgba(255, 255, 255, 0.8);
+            padding: 5px 10px;
+            border-radius: 5px;
         }
-        /* Медиа-запросы для мобильных устройств */
+
+        @keyframes animated-text {
+            from { width: 0; }
+            to { width: 235px; }
+        }
+
+        @keyframes animated-cursor {
+            from { border-right-color: rgba(0,255,0,.75); }
+            to { border-right-color: transparent; }
+        }
+
+        /* Обновленные медиа-запросы для мобильных устройств */
         @media (max-width: 768px) {
             body {
-                font-size: 14px;
-            }
-
-            .header-container {
-                padding: 10px;
+                padding-bottom: 40px; /* Добавляем отступ снизу для всего body */
             }
 
             h1 {
-                font-size: 24px;
+                font-size: 28px;
+                margin-bottom: 20px;
             }
 
             #chat-container {
-                height: calc(100vh - 200px);
-                margin-bottom: 10px;
+                height: calc(100vh - 220px);
+                padding: 10px;
             }
 
             #input-container {
                 flex-direction: column;
-                align-items: stretch;
+                padding: 10px;
+                position: relative;
             }
 
             #user-input {
+                width: 100%;
                 margin-bottom: 10px;
+                padding-top: 20px;
+            }
+
+            #input-placeholder {
+                left: 27px;
+                top: 40px;
             }
 
             .button {
@@ -275,30 +371,58 @@
             }
 
             .message {
-                max-width: 90%;
+                max-width: 100%;
+                padding: 8px 12px;
             }
 
-            table {
+            /* Обновленные стили для таблицы расписания */
+            .schedule-table {
                 font-size: 12px;
             }
 
-            th, td {
+            .schedule-table td {
                 padding: 8px;
+            }
+
+            .schedule-table td:before {
+                min-width: 80px;
+            }
+
+            #author {
+                font-size: 16px;
+                bottom: 0;
+                left: 0;
+                right: 0;
+                text-align: center;
+                padding: 10px;
+                background-color: rgba(255, 255, 255, 0.9);
+                border-top: 1px solid #e0e0e0;
+                width: 100%;
+                box-sizing: border-box;
+            }
+
+            #chat-container {
+                margin-bottom: 50px; /* Увеличиваем отступ снизу */
+            }
+
+            #input-container {
+                margin-bottom: 40px; /* Увеличиваем отступ снизу */
             }
         }
 
         /* Дополнительные стили для очень маленьких экранов */
         @media (max-width: 480px) {
             h1 {
-                font-size: 20px;
+                font-size: 24px;
             }
 
             #chat-container {
-                height: calc(100vh - 180px);
+                height: calc(100vh - 200px);
             }
 
-            .message {
-                padding: 8px 12px;
+            #author {
+                font-size: 12px;
+                padding: 8px;
             }
         }
 
@@ -315,11 +439,6 @@
             box-shadow: 0 2px 5px rgba(0,0,0,0.1);
             border-radius: 8px;
             transition: all 0.3s ease;
-        }
-
-        .schedule-table tr:hover {
-            transform: translateY(-2px);
-            box-shadow: 0 4px 8px rgba(0,0,0,0.15);
         }
 
         .schedule-table td {
@@ -376,6 +495,7 @@
                 padding-right: 10px;
                 flex: 1;
                 text-align: left;
+                white-space: nowrap; /* Предотвращает перенос текста */
             }
 
             .schedule-table td span {
@@ -413,7 +533,8 @@
     </div>
     <div id="chat-container"></div>
     <div id="input-container">
-        <input type="text" id="user-input" placeholder="Ask about the university schedule">
+        <input type="text" id="user-input" placeholder=" ">
+        <div id="input-placeholder">Ask about the university schedule</div>
         <button id="clear-button" class="button">Clear</button>
         <button id="send-button" class="button">Send</button>
     </div>
@@ -481,6 +602,12 @@
             messageElement.innerHTML = message;
             chatContainer.appendChild(messageElement);
             chatContainer.scrollTop = chatContainer.scrollHeight;
+            
+            // Добавляем небольшую задержку перед анимацией для более плавного эффекта
+            setTimeout(() => {
+                messageElement.style.opacity = '1';
+                messageElement.style.transform = 'translateY(0)';
+            }, 10);
         }
 
         function formatSchedule(answer) {
